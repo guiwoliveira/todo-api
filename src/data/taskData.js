@@ -19,11 +19,27 @@ export class DatabaseMemory {
         return task
     }
 
-    update(id, task) {
-        this.#tasks.set(id, task)
+    update(id, updatedFields) {
+        const existingTask = this.#tasks.get(id);
+        if (!existingTask) return null;
+
+        const { id: _ignoredId, createdAt: _ignoredCreatedAt, ...allowedUpdates } = updatedFields;
+
+        const updatedTask = {
+            ...existingTask,
+            ...allowedUpdates,
+            updatedAt: new Date().toISOString(),
+        };
+
+        this.#tasks.set(id, updatedTask);
+        return updatedTask;
     }
 
     delete(id) {
-        this.#tasks.delete(id)
+        const existingTask = this.#tasks.get(id);
+        if (!existingTask) return null;
+
+        this.#tasks.delete(id);
+        return existingTask;
     }
 }

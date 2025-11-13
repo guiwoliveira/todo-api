@@ -24,6 +24,24 @@ app.get('/api/tasks', (req, res) => {
     });
 })
 
+// task list by ID
+app.get("/api/tasks/:id", (req, res) => {
+    const { id } = req.params;
+
+    const task = database.select(id);
+
+    if (!task) {
+        return res.status(404).json({
+            success: false,
+            message: "Tarefa não encontrada",
+        });
+    }
+
+    return res.status(200).json({
+        success: true,
+        data: task,
+    });
+});
 
 // create task
 app.post("/api/tasks", (req, res) => {
@@ -49,6 +67,53 @@ app.post("/api/tasks", (req, res) => {
         data: newTask,
         message: "Tarefa criada com sucesso",
     });
+});
+
+// Update task
+app.put("/api/tasks/:id", (req, res) => {
+    const { id } = req.params;
+    const { title, description, completed } = req.body;
+
+    const existingTask = database.select(id);
+    if (!existingTask) {
+        return res.status(404).json({
+            success: false,
+            message: "Tarefa não encontrada",
+        });
+    }
+
+    const updatedFields = {};
+    if (title !== undefined) updatedFields.title = title;
+    if (description !== undefined) updatedFields.description = description;
+    if (completed !== undefined) updatedFields.completed = completed;
+
+    const updatedTask = database.update(id, updatedFields);
+
+    return res.status(200).json({
+        success: true,
+        data: updatedTask,
+        message: "Tarefa atualizada com sucesso",
+    });
+});
+
+// Delete task
+app.delete("/api/tasks/:id", (req, res) => {
+  const { id } = req.params;
+
+  const deletedTask = database.delete(id);
+
+  if (!deletedTask) {
+    return res.status(404).json({
+      success: false,
+      message: "Tarefa não encontrada",
+    });
+  }
+
+  return res.status(200).json({
+    success: true,
+    data: deletedTask,
+    message: "Tarefa deletada com sucesso",
+  });
 });
 
 app.listen(3000)
