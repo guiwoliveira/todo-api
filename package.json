@@ -1,16 +1,11 @@
 {
   "type": "module",
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.598.0",
-    "@aws-sdk/lib-dynamodb": "^3.598.0",
-    "cors": "^2.8.5",
-    "express": "^5.1.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.11"
+    "@aws-sdk/client-dynamodb": "^3.637.0",
+    "@aws-sdk/lib-dynamodb": "^3.637.0"
   },
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "start": "sam local start-api",
+    "deploy": "sam deploy"
   }
 }
