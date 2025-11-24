@@ -48,6 +48,21 @@ Resources:
           Properties:
             Path: /api/tasks
             Method: get
+            
+  GetTaskFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: src/functions/getTask.handler
+      Policies: 
+        - DynamoDBCrudPolicy:
+            TableName: Tasks
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /api/tasks/{id}
+            Method: get
 
   CreateTaskFunction:
     Type: AWS::Serverless::Function
