@@ -33,6 +33,21 @@ Resources:
           Properties:
             Path: /api/health
             Method: get
+  
+  ListTasksFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: src/functions/listTasks.handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: Tasks
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /api/tasks
+            Method: get
 
   CreateTaskFunction:
     Type: AWS::Serverless::Function
